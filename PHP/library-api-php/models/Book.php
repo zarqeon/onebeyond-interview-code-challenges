@@ -1,6 +1,11 @@
 <?php
 
 class Book {
+	public const AUTHOR = 'author';
+	public const TITLE = 'title';
+	public const ISBN = 'isbn';
+	public const FORMAT = 'format';
+
     public $id;
     public $title;
     public $authorId;

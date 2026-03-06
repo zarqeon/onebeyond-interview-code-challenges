@@ -1,6 +1,8 @@
 <?php
 
 class Fine {
+	public const DEFAULT_FINE_AMOUNT = 10;
+	public const FINE_REASON_OVERUE = "%s returned %s after due time (%s). A fine of %s EUR was issued.";
     public $id;
     public $borrowerId;
     public $amount;

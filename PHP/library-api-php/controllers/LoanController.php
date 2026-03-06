@@ -1,21 +1,54 @@
 <?php
 
-require_once __DIR__ . '/../data/data.php';
-require_once __DIR__ . '/../models/BookStock.php';
-require_once __DIR__ . '/../models/Fine.php';
+require_once __DIR__ . '/../services/BookStockService.php';
 
 class LoanController {
+
+	public function __construct(
+		private BookStockService $bookStockService,
+		private AuthorService $authorService
+	)
+	{}
+
     // GET /loans
-    public function index() {
-        // TODO: Implement logic to list active loans with borrower and book details.
+	public function index(): void
+       	{
         header('Content-Type: application/json');
-        echo json_encode(['message' => 'List active loans functionality to be implemented.']);
+
+	$borrowed = $this->bookStockService->getBorrowedBookData();
+
+	$message = $this->formatMessage($borrowed);
+	echo json_encode (['message' => $message]);
     }
     
     // POST /loans/return
-    public function returnBook() {
-        // TODO: Implement logic to process the return of a book and calculate fines if overdue.
+	public function returnBook(int $stockId): void
+       	{
         header('Content-Type: application/json');
-        echo json_encode(['message' => 'Return book functionality to be implemented.']);
+
+	$stock = $this->bookStockService->getStockById($stockId);
+
+	$message = $this->bookStockService->freeUpBookStock($stock);
+
+        echo json_encode(['message' => $message]);
+    }
+
+    // Ideally this function would live in a message formatter service
+    private function formatMessage(array $borrowed): array
+    {
+	    $message = [];
+	    foreach ($borrowed as $row) {
+		    $message[] = [
+			    Borrower::NAME => $row[BookStockService::BORROWER]->name,
+			    Borrower::EMAIL => $row[BookStockService::BORROWER]->email,
+			    Book::AUTHOR => $this->authorService->getAuthorNameByAuthorId($row[BookStockService::BOOK]->authorId),
+			    Book::TITLE => $row[BookStockService::BOOK]->title,
+			    Book::ISBN => $row[BookStockService::BOOK]->isbn,
+			    Book::FORMAT => $row[BookStockService::BOOK]->format,
+			    BookStock::LOAN_END => $row[BookStockService::STOCK]->loanEndDate
+		    ];
+	    }
+
+	    return $message;
     }
 }

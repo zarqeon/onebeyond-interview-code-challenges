@@ -1,6 +1,7 @@
 <?php
 
 class BookStock {
+	public const LOAN_END = 'loan_end_date';
     public $id;
     public $bookId;
     public $isOnLoan;

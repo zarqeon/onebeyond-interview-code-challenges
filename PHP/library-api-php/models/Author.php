@@ -1,6 +1,8 @@
 <?php
 
 class Author {
+	public const NAME = 'name';
+
     public $id;
     public $name;
 

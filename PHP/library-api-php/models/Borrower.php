@@ -1,6 +1,9 @@
 <?php
 
 class Borrower {
+	public const NAME = "name";
+	public const EMAIL = "email";
+
     public $id;
     public $name;
     public $email;
