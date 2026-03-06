@@ -23,7 +23,7 @@ class ReservationController {
 
 		$message = $this->bookStockService->getAvailabilityMessage($stock, $borrower);
 		if ($message !== null) {
-			echo json_encode(['merrage' => $message]);
+			echo json_encode(['message' => $message]);
 			return;
 		}
 
